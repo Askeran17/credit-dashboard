@@ -23,8 +23,12 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="loan in allLoans" :key="loan.loan_id">
-            <td>{{ loan.institution_name }}</td>
+          <tr v-for="loan in allLoans" :key="loan._id || loan.loan_id || loan.loan_no">
+            <td>
+              <router-link class="nav-link" :to="`/dashboard/${loan.institution_id}`">
+                {{ loan.institution_name }}
+              </router-link>
+            </td>
             <td>{{ loan.loan_no }}</td>
             <td>
               <span class="badge" :class="loan.status.toLowerCase()">{{ loan.status }}</span>
@@ -62,6 +66,8 @@ export default {
       const dash = await axios.get(`http://localhost:8000/dashboard/${inst._id}`)
       const loansWithName = dash.data.loans.map(loan => ({
         ...loan,
+        // Ensure we have the correct institution id for routing
+        institution_id: inst._id,
         institution_name: inst.name
       }))
       all.push(...loansWithName)
