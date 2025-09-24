@@ -1,2 +1,0 @@
-generated_for_date,country,loan_originator_id,loan_id,loan_no,loan_type,loan_date,loan_last_date,principal_open,principal_open_eur,status,interest_daily,due_day_of_month,risk_category,currency,exchange rate,listing status
-2025-05-28,LV,1,LV9481,14115,Business loan,2025-05-29,2026-05-28,150000,150000,ACTIVE,0.0002777777777777778,5,Low,EUR,1,Not listed
