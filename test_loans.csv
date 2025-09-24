@@ -1,0 +1,2 @@
+loan_id,loan_no,loan_type,loan_date,loan_last_date,principal_open,principal_open_eur,status
+TEST001,10001,Business loan,2025-09-01,2025-09-25,10000,10000,ACTIVE
