@@ -1,7 +1,8 @@
 <template>
+  <div class="narrow">
   <div class="card">
   <h2 class="mt-0">Create Credit Institution</h2>
-    <form class="form-grid two" @submit.prevent="submitForm">
+  <form class="form-grid two" @submit.prevent="submitForm">
       <div class="field">
         <label class="label">Name</label>
         <input class="input" v-model="form.name" placeholder="Name" />
@@ -40,13 +41,23 @@
         <input class="input" v-model="form.contacts" placeholder="info@example.com, support@example.com" />
       </div>
       <div class="actions full-span">
-        <button class="btn btn-primary" type="submit">Create</button>
-        <button class="btn btn-outline" type="button" @click="resetForm">Reset</button>
+        <button class="btn btn-primary" type="submit" :disabled="isSubmitting">
+          {{ isSubmitting ? 'Creating…' : 'Create' }}
+        </button>
+        <button class="btn btn-outline" type="button" @click="resetForm" :disabled="isSubmitting">Reset</button>
       </div>
     </form>
     <div v-if="createdId" class="card mb-1">
-      ✅ Institution created! ID: <strong>{{ createdId }}</strong>
+      <div class="mb-075">
+        ✅ Institution created! ID: <strong>{{ createdId }}</strong>
+      </div>
+      <div class="muted mb-075">The ID is saved to your browser (localStorage). You can also copy it now.</div>
+      <div class="actions">
+        <button class="btn btn-outline" type="button" @click="copyId">{{ copyStatus || 'Copy ID' }}</button>
+        <button class="btn btn-primary" type="button" @click="goToDashboard">Go to dashboard</button>
+      </div>
     </div>
+  </div>
   </div>
 
 </template>
@@ -67,26 +78,49 @@ export default {
         website_url: '',
         contacts: ''
       },
-      createdId: null
+      createdId: null,
+      isSubmitting: false,
+      copyStatus: ''
     }
   },
   methods: {
     async submitForm() {
+      if (this.isSubmitting) return
+      this.isSubmitting = true
       const payload = {
         ...this.form,
         contacts: this.form.contacts.split(',').map(c => c.trim())
       }
       try {
-        const res = await axios.post('http://localhost:8000/institutions', payload)
+  const res = await axios.post('/institutions', payload)
         const id = res.data.id
         this.createdId = id
         localStorage.setItem('institution_id', id)
-
-        // Переход на дашборд
-        this.$router.push(`/dashboard/${id}`)
       } catch (err) {
         console.error('Failed to create institution:', err)
+      } finally {
+        this.isSubmitting = false
       }
+    },
+    copyId() {
+      if (!this.createdId) return
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(this.createdId)
+          .then(() => { this.copyStatus = 'Copied!'; setTimeout(() => this.copyStatus = '', 1500) })
+          .catch(() => { this.copyStatus = 'Copy failed'; setTimeout(() => this.copyStatus = '', 1500) })
+      } else {
+        // Fallback
+        const el = document.createElement('textarea')
+        el.value = this.createdId
+        document.body.appendChild(el)
+        el.select()
+        try { document.execCommand('copy'); this.copyStatus = 'Copied!' } catch { this.copyStatus = 'Copy failed' }
+        document.body.removeChild(el)
+        setTimeout(() => this.copyStatus = '', 1500)
+      }
+    },
+    goToDashboard() {
+      if (this.createdId) this.$router.push(`/dashboard/${this.createdId}`)
     },
     resetForm() {
       this.form = {

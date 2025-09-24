@@ -1,7 +1,7 @@
 <template>
   <div class="card" v-if="data">
-    <h2 style="margin-top:0">Dashboard</h2>
-    <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: .75rem; margin-bottom: 1rem;">
+    <h2 class="mt-0">Dashboard</h2>
+    <div class="stats-grid">
       <div class="card">
         <div class="label">Total Loan</div>
         <div style="font-size:1.4rem; font-weight:700;">€{{ format(data.total_loan_eur) }}</div>
@@ -21,7 +21,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="loan in data.loans" :key="loan.loan_id">
+          <tr v-for="loan in data.loans" :key="loan._id || loan.loan_id || loan.loan_no">
             <td>{{ loan.loan_no }}</td>
             <td>
               <span class="badge" :class="loan.status.toLowerCase()">{{ loan.status }}</span>
@@ -50,7 +50,7 @@ export default {
     this.$router.push('/')
     return
   }
-  const res = await axios.get(`http://localhost:8000/dashboard/${id}`)
+  const res = await axios.get(`/dashboard/${id}`)
   this.data = res.data
 },
   methods: {

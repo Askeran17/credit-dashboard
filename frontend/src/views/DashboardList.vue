@@ -1,7 +1,7 @@
 <template>
   <div class="card">
-    <h2 style="margin-top:0">📊 Dashboard</h2>
-    <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: .75rem; margin-bottom: 1rem;">
+    <h2 class="mt-0">📊 Dashboard</h2>
+    <div class="stats-grid">
       <div class="card">
         <div class="label">Total Loan</div>
         <div style="font-size:1.4rem; font-weight:700;">€{{ format(totalLoan) }}</div>
@@ -55,7 +55,7 @@ export default {
     }
   },
   async mounted() {
-    const res = await axios.get('http://localhost:8000/institutions')
+  const res = await axios.get('/institutions')
     const institutions = res.data
 
     let all = []
@@ -63,7 +63,7 @@ export default {
     let invested = 0
 
     for (const inst of institutions) {
-      const dash = await axios.get(`http://localhost:8000/dashboard/${inst._id}`)
+  const dash = await axios.get(`/dashboard/${inst._id}`)
       const loansWithName = dash.data.loans.map(loan => ({
         ...loan,
         // Ensure we have the correct institution id for routing

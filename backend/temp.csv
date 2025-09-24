@@ -1,4 +1,2 @@
 loan_id,loan_no,loan_type,loan_date,loan_last_date,principal_open,principal_open_eur,status
-EX001,20001,Business loan,2025-08-01,2025-09-20,8000,8000,ACTIVE
-EX002,20002,Business loan,2025-09-10,2026-01-15,15000,15000,ACTIVE
-EX003,20003,Business loan,2025-09-15,2026-12-01,30000,30000,ACTIVE
+TEST001,10001,Business loan,2025-09-01,2025-09-25,10000,10000,ACTIVE

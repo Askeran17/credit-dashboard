@@ -2,10 +2,10 @@
   <div class="app-root">
     <header class="app-header">
       <div class="container header-inner">
-        <div class="brand">
+        <router-link class="brand nav-link" to="/">
           <span class="brand-icon">💳</span>
           <span class="brand-title">Credit Dashboard</span>
-        </div>
+        </router-link>
         <nav class="nav-links">
           <router-link class="nav-link" to="/">Create</router-link>
           <router-link class="nav-link" to="/upload">Upload CSV</router-link>
