@@ -1,5 +1,5 @@
 # step 1: build frontend
-FROM node:18 AS frontend-builder
+FROM node:20.19.0 AS frontend-builder
 
 WORKDIR /frontend
 COPY frontend/ /frontend
