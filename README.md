@@ -2,6 +2,8 @@
 
 A full‑stack app to manage credit institutions and their loan portfolios. The backend is a FastAPI service with MongoDB, and the frontend is a Vue 3 + Vite app.
 
+![Global Dashboard](./frontend/src/assets/images/dashboard-list.png) 
+
 ## Live Deployment
 🚀 Deployed on Render: https://credit-dashboard-8jxr.onrender.com/
 
@@ -18,6 +20,7 @@ The backend serves both the API and the built SPA. Public API endpoints are avai
 - Backend: FastAPI, Pydantic v2, Uvicorn, MongoDB (PyMongo)
 - Frontend: Vue 3, Vue Router, Vite, Axios.
 - CSV parsing: Pandas
+- Docker
 
 ## Prerequisites
 - Python 3.9+
@@ -150,6 +153,15 @@ If you want the exact Docker image instead of Render's Python runtime, switch se
 | Different base URLs frontend/backend | Frontend hardcoded `http://localhost:8000` | Plan: use relative `/api` in production and configurable `VITE_API_URL` for non‑co‑located deployments (update pending / partially applied). |
 
 If you run into cold‑start latency on free tier: first request may take a few seconds; keep‑alive pings (cron) can mitigate.
+
+## Screenshots
+
+| Screen | Image | Description |
+|--------|-------|-------------|
+| Create Institution Form | ![Create Institution](./frontend/src/assets/images/dashboard-form.png) | Form to register a new credit institution: name, country, founding year, portfolio size, risk score, product type, website, contacts. Validates basic input and posts to `/api/institutions`. |
+| Global Dashboard | ![Global Dashboard](./frontend/src/assets/images/dashboard-list.png) | Aggregated loan metrics across all institutions: total loan amount, invested amount with percentage, and a loans table including status badges (ACTIVE / EXPIRED). Clicking an institution navigates to its detail dashboard. |
+| Institutions List | ![Institutions List](./frontend/src/assets/images/list-institution-delete.png) | Existing institutions with country labels and delete actions (cascade removes related loans). |
+| Upload CSV | ![Upload CSV](./frontend/src/assets/images/upload-csv.png) | CSV import panel where a user uploads loan data for a specific institution ID; backend parses with Pandas and updates loan portfolio. |
 
 ## API Endpoints (summary)
 
