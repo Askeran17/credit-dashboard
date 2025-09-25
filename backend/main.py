@@ -26,7 +26,7 @@ app.include_router(institutions.router)
 app.include_router(loans.router)
 
 # 🖼️ Подключаем Vue SPA
-frontend_path = os.path.join(os.path.dirname(__file__), '..', 'frontend', 'dist')
+frontend_path = os.path.join(os.path.dirname(__file__), 'static')
 app.mount("/", StaticFiles(directory=frontend_path, html=True), name="static")
 
 # 🏠 Отдаём index.html по корневому маршруту
