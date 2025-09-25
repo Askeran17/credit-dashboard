@@ -6,7 +6,7 @@ COPY frontend/ /frontend
 RUN npm install && npm run build
 
 # step 2: backend
-FROM python:3.10-slim
+FROM python:3.10
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
