@@ -5,6 +5,7 @@ from fastapi.responses import FileResponse
 from routes import institutions, loans
 from dotenv import load_dotenv
 import os
+import requests
 
 # 🔧 Загружаем переменные из ../.env
 load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), '..', '.env'))
@@ -34,4 +35,11 @@ app.mount("/", StaticFiles(directory=frontend_path, html=True), name="static")
 def serve_index():
     return FileResponse(os.path.join(frontend_path, "index.html"))
 
-
+# 🌍 Показываем внешний IP контейнера (для MongoDB Atlas whitelist)
+@app.get("/ip")
+def get_ip():
+    try:
+        ip = requests.get("https://api.ipify.org").text
+        return {"ip": ip}
+    except Exception as e:
+        return {"error": str(e)}
