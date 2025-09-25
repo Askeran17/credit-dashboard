@@ -4,6 +4,8 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 from routes import institutions, loans
 from dotenv import load_dotenv
+from fastapi.responses import FileResponse
+from starlette.requests import Request
 import os
 import requests
 
@@ -38,3 +40,10 @@ def get_ip():
         return {"ip": ip}
     except Exception as e:
         return {"error": str(e)}
+
+@app.middleware("http")
+async def spa_fallback(request: Request, call_next):
+    response = await call_next(request)
+    if response.status_code == 404 and not request.url.path.startswith("/api"):
+        return FileResponse(os.path.join(frontend_path, "index.html"))
+    return response
