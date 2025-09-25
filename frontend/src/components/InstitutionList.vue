@@ -17,7 +17,7 @@
 
 
 <script>
-import axios from 'axios'
+import api from '@/services/api'
 
 export default {
   name: 'InstitutionList',
@@ -32,7 +32,7 @@ export default {
   methods: {
     async loadInstitutions() {
       try {
-  const res = await axios.get('/institutions')
+  const res = await api.get('/institutions')
         this.institutions = res.data
       } catch (err) {
         console.error('Failed to load institutions:', err)
@@ -41,7 +41,7 @@ export default {
     async deleteInstitution(id) {
       if (!confirm('Are you sure you want to delete this institution?')) return
       try {
-  await axios.delete(`/institutions/${id}`)
+  await api.delete(`/institutions/${id}`)
         this.institutions = this.institutions.filter(inst => inst._id !== id)
       } catch (err) {
         console.error('Failed to delete institution:', err)

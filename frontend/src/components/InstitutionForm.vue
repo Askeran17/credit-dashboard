@@ -63,7 +63,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+import api from '@/services/api'
 
 export default {
   data() {
@@ -92,7 +92,7 @@ export default {
         contacts: this.form.contacts.split(',').map(c => c.trim())
       }
       try {
-  const res = await axios.post('/institutions', payload)
+  const res = await api.post('/institutions', payload)
         const id = res.data.id
         this.createdId = id
         localStorage.setItem('institution_id', id)

@@ -23,17 +23,12 @@ if ENV == "development":
     )
 
 # 📦 Подключаем API
-app.include_router(institutions.router)
-app.include_router(loans.router)
+app.include_router(institutions.router, prefix="/api")
+app.include_router(loans.router, prefix="/api")
 
 # 🖼️ Подключаем Vue SPA
 frontend_path = os.path.join(os.path.dirname(__file__), 'static')
 app.mount("/", StaticFiles(directory=frontend_path, html=True), name="static")
-
-# 🏠 Отдаём index.html по корневому маршруту
-@app.get("/")
-def serve_index():
-    return FileResponse(os.path.join(frontend_path, "index.html"))
 
 # 🌍 Показываем внешний IP контейнера (для MongoDB Atlas whitelist)
 @app.get("/ip")
