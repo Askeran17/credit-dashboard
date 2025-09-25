@@ -1,6 +1,6 @@
 <template>
   <div class="card" v-if="data">
-    <h2 class="mt-0">Dashboard</h2>
+  <h2 class="mt-0">Dashboard <span v-if="data.institution_name" class="muted"> ( {{ data.institution_name }} )</span></h2>
     <div class="stats-grid">
       <div class="card">
         <div class="label">Total Loan</div>
@@ -15,6 +15,7 @@
       <table>
         <thead>
           <tr>
+            <th>Name</th>
             <th>Loan No</th>
             <th>Status</th>
             <th>Amount (€)</th>
@@ -22,6 +23,7 @@
         </thead>
         <tbody>
           <tr v-for="loan in data.loans" :key="loan._id || loan.loan_id || loan.loan_no">
+            <td>{{ loan.name }}</td>
             <td>{{ loan.loan_no }}</td>
             <td>
               <span class="badge" :class="loan.status.toLowerCase()">{{ loan.status }}</span>

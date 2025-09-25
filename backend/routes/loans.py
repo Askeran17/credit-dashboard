@@ -1,5 +1,6 @@
 from fastapi import APIRouter, UploadFile
 from database import db
+from bson import ObjectId
 from datetime import datetime  
 from utils.csv_parser import parse_csv
 
@@ -29,17 +30,26 @@ def get_dashboard(institution_id: str):
         {"$set": {"status": "EXPIRED"}}
     )
 
+    # Получаем данные института
+    inst = db.institutions.find_one({"_id": ObjectId(institution_id)})
+    institution_name = inst.get("name") if inst else None
+
     # Получаем все займы
     loans = list(db.loans.find({"institution_id": institution_id}))
     for l in loans:
         if "_id" in l:
             l["_id"] = str(l["_id"])
+        # добавляем имя института для удобства на фронте
+        if institution_name and "name" not in l:
+            l["name"] = institution_name
 
     total = sum(loan["principal_open_eur"] for loan in loans)
     invested = sum(loan["principal_open_eur"] for loan in loans if loan["status"] == "ACTIVE")
     percent = round((invested / total) * 100, 2) if total else 0
 
     return {
+        "institution_id": institution_id,
+        "institution_name": institution_name,
         "total_loan_eur": total,
         "invested_eur": invested,
         "invested_percent": percent,
