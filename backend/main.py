@@ -22,17 +22,11 @@ if ENV == "development":
         allow_headers=["*"],
     )
 
-# 📦 Подключаем API на /api/*
-app.include_router(institutions.router, prefix="/api")
-app.include_router(loans.router, prefix="/api")
+# 📦 Подключаем API
+app.include_router(institutions.router)
+app.include_router(loans.router)
 
-# 🌍 IP endpoint
-@app.get("/api/ip")
-def get_ip():
-    import requests
-    return {"ip": requests.get("https://api.ipify.org").text}
-
-# 🖼️ Подключаем Vue SPA на /
+# 🖼️ Подключаем Vue SPA
 frontend_path = os.path.join(os.path.dirname(__file__), 'static')
 app.mount("/", StaticFiles(directory=frontend_path, html=True), name="static")
 
