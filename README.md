@@ -11,7 +11,7 @@ A full‑stack app to manage credit institutions and their loan portfolios. The 
 
 ## Tech Stack
 - Backend: FastAPI, Pydantic v2, Uvicorn, MongoDB (PyMongo)
-- Frontend: Vue 3, Vue Router, Vite, Axios
+- Frontend: Vue 3, Vue Router, Vite, Axios.
 - CSV parsing: Pandas
 
 ## Prerequisites
