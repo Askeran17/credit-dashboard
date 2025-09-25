@@ -1,5 +1,6 @@
 from pymongo import MongoClient
 import os
+import certifi
 
 # 📡 Получаем URI из переменной окружения
 mongo_uri = os.getenv("MONGO_URI")
@@ -8,7 +9,7 @@ if not mongo_uri:
     raise ValueError("❌ MONGO_URI is not set. Check your environment variables.")
 
 # 🔌 Подключаемся к Atlas
-client = MongoClient(mongo_uri, tls=True)
+client = MongoClient(mongo_uri, tls=True, tlsCAFile=certifi.where())
 db = client["credit_dashboard"]
 
 # 🧪 Тест подключения
