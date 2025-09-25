@@ -37,7 +37,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+import api from '@/services/api'
 
 export default {
   name: 'DashboardView',
@@ -52,7 +52,7 @@ export default {
     this.$router.push('/')
     return
   }
-  const res = await axios.get(`/dashboard/${id}`)
+  const res = await api.get(`/dashboard/${id}`)
   this.data = res.data
 },
   methods: {

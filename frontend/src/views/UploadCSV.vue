@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+import api from '@/services/api'
 
 export default {
   data() {
@@ -36,7 +36,7 @@ export default {
       try {
         const formData = new FormData()
         formData.append('file', this.file)
-        await axios.post(`/loans/import/${this.institutionId}`, formData)
+        await api.post(`/loans/import/${this.institutionId}`, formData)
         alert('CSV uploaded!')
       } catch (err) {
         console.error(err)

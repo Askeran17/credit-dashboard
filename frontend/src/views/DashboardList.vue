@@ -42,7 +42,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+import api from '@/services/api'
 
 export default {
   name: 'DashboardList',
@@ -55,7 +55,7 @@ export default {
     }
   },
   async mounted() {
-  const res = await axios.get('/institutions')
+  const res = await api.get('/institutions')
     const institutions = res.data
 
     let all = []
@@ -63,7 +63,7 @@ export default {
     let invested = 0
 
     for (const inst of institutions) {
-  const dash = await axios.get(`/dashboard/${inst._id}`)
+  const dash = await api.get(`/dashboard/${inst._id}`)
       const loansWithName = dash.data.loans.map(loan => ({
         ...loan,
         // Ensure we have the correct institution id for routing
