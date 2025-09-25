@@ -1,5 +1,6 @@
 from pydantic import BaseModel
 from typing import List
+from typing import Optional
 
 class CreditInstitution(BaseModel):
     name: str
@@ -12,9 +13,9 @@ class CreditInstitution(BaseModel):
     contacts: List[str]
 
 class Loan(BaseModel):
-    generated_for_date: str
-    country: str
-    loan_originator_id: int
+    generated_for_date: Optional[str] = None
+    country: Optional[str] = None
+    loan_originator_id: Optional[int] = None
     loan_id: str
     loan_no: str
     loan_type: str
@@ -23,11 +24,11 @@ class Loan(BaseModel):
     principal_open: float
     principal_open_eur: float
     status: str
-    interest_daily: float
-    due_day_of_month: int
-    risk_category: str
-    currency: str
-    exchange_rate: float
-    listing_status: str
+    interest_daily: Optional[float] = None
+    due_day_of_month: Optional[int] = None
+    risk_category: Optional[str] = None
+    currency: Optional[str] = None
+    exchange_rate: Optional[float] = None
+    listing_status: Optional[str] = None
     loan_url: str
     institution_id: str
