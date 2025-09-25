@@ -8,6 +8,12 @@ RUN npm install && npm run build
 # step 2: backend
 FROM python:3.10-slim
 
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    libssl-dev \
+    ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+
 WORKDIR /app
 
 # Copy the backend code into the container
