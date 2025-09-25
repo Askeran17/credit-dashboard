@@ -2,6 +2,11 @@
 
 A full‑stack app to manage credit institutions and their loan portfolios. The backend is a FastAPI service with MongoDB, and the frontend is a Vue 3 + Vite app.
 
+## Live Deployment
+🚀 Deployed on Render: https://credit-dashboard-8jxr.onrender.com/
+
+The backend serves both the API and the built SPA. Public API endpoints are available under `/api` (e.g. `https://credit-dashboard-8jxr.onrender.com/api/institutions`).
+
 ## Features
 - Create and list credit institutions
 - Upload CSV files with loans for an institution
@@ -85,6 +90,68 @@ source .venv/bin/activate
 uvicorn main:app --reload
 ```
 Open `http://localhost:8000` in your browser.
+
+## Docker
+
+You can build and run everything (frontend build + backend) via the provided multi‑stage `Dockerfile`.
+
+### Build Image
+```bash
+docker build -t credit-dashboard .
+```
+
+### Run Container (local MongoDB)
+```bash
+docker run -p 10000:10000 \
+	-e MONGO_URI=mongodb://host.docker.internal:27017/creditdb \
+	credit-dashboard
+```
+Then open: http://localhost:10000
+
+Notes:
+- Stage 1 builds the Vue frontend with Node 20.
+- Stage 2 uses Python 3.10, copies backend + built `/dist` into `/app/static` and launches Uvicorn on port `10000` (mapped to `0.0.0.0`).
+- Adjust the exposed port mapping if deploying somewhere that expects `$PORT` (Render sets `$PORT` automatically when using its native build, not the Dockerfile).
+
+### Using Your Own .env
+Instead of embedding secrets, pass them at runtime with `-e` or `--env-file`.
+
+## Deployment on Render
+
+Deployment was performed using Render's native Python service (not the Dockerfile) via `render.yaml`:
+
+`render.yaml` excerpt:
+```yaml
+services:
+	- type: web
+		name: credit-dashboard
+		runtime: python
+		rootDir: backend
+		buildCommand: pip install -r requirements.txt
+		startCommand: uvicorn main:app --host=0.0.0.0 --port=$PORT
+```
+
+### How it works
+- Render injects `$PORT`; `uvicorn` binds to it.
+- Frontend static assets are expected to be present in `backend/static` (so after building locally you can commit or adapt build process).
+- Environment variable `MONGO_URI` is configured in the Render dashboard (marked `sync: false` so it is not stored in the repo).
+
+### Alternative: Deploy with Docker
+If you want the exact Docker image instead of Render's Python runtime, switch service to `type: web` with `dockerfilePath: Dockerfile` (or enable the Docker tab in the dashboard) and ensure the container listens on `$PORT` (modify `CMD` to `--port=$PORT`).
+
+## Problems Encountered & Solutions
+
+| Problem | Symptom | Solution |
+|---------|---------|----------|
+| Port mismatch (Render vs local) | Local ran on 8000, Docker image used 10000 | Normalized by letting Docker listen on 10000 and in Render runtime using `$PORT` via `startCommand`. Could adjust Docker CMD to respect `$PORT` for consistency. |
+| Static files not served initially | 404 for SPA routes on Render | Ensured frontend build output copied to `backend/static` (or built locally before deploy) and FastAPI `StaticFiles` mount configured (see `main.py`). |
+| CORS during local dev (5173 -> 8000) | Browser blocked requests | Added CORS middleware in FastAPI conditioned on `ENV=development` to allow `http://localhost:5173`. |
+| Environment secrets (Mongo URI) | Hardcoding risk | Used Render dashboard env var with `sync: false` and documented `.env` usage locally. |
+| Different base URLs frontend/backend | Frontend hardcoded `http://localhost:8000` | Plan: use relative `/api` in production and configurable `VITE_API_URL` for non‑co‑located deployments (update pending / partially applied). |
+
+If you run into cold‑start latency on free tier: first request may take a few seconds; keep‑alive pings (cron) can mitigate.
+
+## API Endpoints (summary)
 
 ## How to Use
 1) Create an institution
