@@ -22,9 +22,6 @@ COPY backend/ /app
 # Copy built frontend
 COPY --from=frontend-builder /frontend/dist /app/static
 
-# Copy environment variables
-COPY .env /app/.env
-
 # Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
