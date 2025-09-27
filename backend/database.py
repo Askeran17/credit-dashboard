@@ -1,7 +1,9 @@
 from pymongo import MongoClient
+from dotenv import load_dotenv, find_dotenv
 import os
 import certifi
 
+load_dotenv(find_dotenv())
 # 📡 Получаем URI из переменной окружения
 mongo_uri = os.getenv("MONGO_URI")
 

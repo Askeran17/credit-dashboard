@@ -16,14 +16,21 @@ RUN apt-get update && apt-get install -y \
 
 WORKDIR /app
 
-# Copy the backend code into the container
+# Copy backend code
 COPY backend/ /app
 
-# Copy the built frontend
+# Copy built frontend
 COPY --from=frontend-builder /frontend/dist /app/static
 
-# Install dependencies
+# Copy environment variables
+COPY .env /app/.env
+
+# Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Start FastAPI with Uvicorn
+# Expose port (optional but recommended)
+EXPOSE 10000
+
+# Start FastAPI
 CMD ["uvicorn", "main:app", "--host=0.0.0.0", "--port=10000"]
+
