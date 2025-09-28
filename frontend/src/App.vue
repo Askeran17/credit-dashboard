@@ -22,7 +22,7 @@
     <footer class="app-footer">
       <div class="container footer-inner">
         <span>© {{ new Date().getFullYear() }} Credit Dashboard</span>
-        <span class="muted">Built with Vue + Vite</span>
+        <span class="muted">Built with Vue </span>
       </div>
     </footer>
   </div>

@@ -51,10 +51,10 @@
       <div class="mb-075">
         ✅ Institution created! ID: <strong>{{ createdId }}</strong>
       </div>
-      <div class="muted mb-075">The ID is saved to your browser (localStorage). You can also copy it now.</div>
+      <div class="muted mb-075">The ID is saved to your browser (localStorage). Copy it now and go to Upload CSV.</div>
       <div class="actions">
         <button class="btn btn-outline" type="button" @click="copyId">{{ copyStatus || 'Copy ID' }}</button>
-        <button class="btn btn-primary" type="button" @click="goToDashboard">Go to dashboard</button>
+        <button class="btn btn-primary" type="button" @click="goToUpload">Go to Upload CSV</button>
       </div>
     </div>
   </div>
@@ -109,7 +109,6 @@ export default {
           .then(() => { this.copyStatus = 'Copied!'; setTimeout(() => this.copyStatus = '', 1500) })
           .catch(() => { this.copyStatus = 'Copy failed'; setTimeout(() => this.copyStatus = '', 1500) })
       } else {
-        // Fallback
         const el = document.createElement('textarea')
         el.value = this.createdId
         document.body.appendChild(el)
@@ -119,8 +118,8 @@ export default {
         setTimeout(() => this.copyStatus = '', 1500)
       }
     },
-    goToDashboard() {
-      if (this.createdId) this.$router.push(`/dashboard/${this.createdId}`)
+    goToUpload() {
+      if (this.createdId) this.$router.push(`/upload`)
     },
     resetForm() {
       this.form = {

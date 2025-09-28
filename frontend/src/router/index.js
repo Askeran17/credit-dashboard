@@ -13,8 +13,6 @@ const routes = [
   { path: '/institutions', component: InstitutionList }
 ]
 
-
-
 export default createRouter({
   history: createWebHistory(),
   routes

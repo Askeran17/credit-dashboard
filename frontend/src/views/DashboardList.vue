@@ -66,7 +66,7 @@ export default {
   const dash = await api.get(`/dashboard/${inst._id}`)
       const loansWithName = dash.data.loans.map(loan => ({
         ...loan,
-        // Ensure we have the correct institution id for routing
+        
         institution_id: inst._id,
         institution_name: inst.name
       }))
