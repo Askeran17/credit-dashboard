@@ -5,11 +5,11 @@
   <form class="form-grid two" @submit.prevent="submitForm">
       <div class="field">
         <label class="label">Name</label>
-        <input class="input" v-model="form.name" placeholder="Name" />
+        <input class="input" v-model="form.name" placeholder="Name" required />
       </div>
       <div class="field">
         <label class="label">Country</label>
-        <input class="input" v-model="form.country" placeholder="Country" />
+        <input class="input" v-model="form.country" placeholder="Country" required />
       </div>
       <div class="field">
         <label class="label">Founding Year</label>

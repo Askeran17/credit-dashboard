@@ -20,7 +20,7 @@ async def import_loans(institution_id: str, file: UploadFile):
 def get_dashboard(institution_id: str):
     today = datetime.utcnow().date()
 
-    # Обновляем статус займов, если срок истёк
+    # Update status of expired loans
     db.loans.update_many(
         {
             "institution_id": institution_id,
@@ -30,16 +30,16 @@ def get_dashboard(institution_id: str):
         {"$set": {"status": "EXPIRED"}}
     )
 
-    # Получаем данные института
+    # Get institution name
     inst = db.institutions.find_one({"_id": ObjectId(institution_id)})
     institution_name = inst.get("name") if inst else None
 
-    # Получаем все займы
+    # Get all loans
     loans = list(db.loans.find({"institution_id": institution_id}))
     for l in loans:
         if "_id" in l:
             l["_id"] = str(l["_id"])
-        # добавляем имя института для удобства на фронте
+        # Add institution name for frontend convenience
         if institution_name and "name" not in l:
             l["name"] = institution_name
 

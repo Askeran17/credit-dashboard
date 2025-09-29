@@ -8,12 +8,12 @@ from starlette.requests import Request
 import os
 import requests
 
-# 🔧 Загружаем переменные из .env
+# Upload variables from .env
 load_dotenv(find_dotenv())
 
 app = FastAPI()
 
-# 🌐 CORS — только в режиме разработки
+# CORS — only for development
 ENV = os.getenv("ENV", "development")
 if ENV == "development":
     app.add_middleware(
@@ -23,11 +23,11 @@ if ENV == "development":
         allow_headers=["*"],
     )
 
-# 📦 Подключаем API
+# Connect API routers
 app.include_router(institutions.router, prefix="/api")
 app.include_router(loans.router, prefix="/api")
 
-# 🖼️ Подключаем Vue SPA
+# Connect Vue SPA (frontend)
 if ENV == "development":
     frontend_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'frontend', 'dist'))
 else:
@@ -35,7 +35,7 @@ else:
 
 app.mount("/", StaticFiles(directory=frontend_path, html=True), name="static")
 
-# 🌍 Показываем внешний IP контейнера (для MongoDB Atlas whitelist)
+# Show external IP-address of the container (for MongoDB Atlas whitelist)
 @app.get("/ip")
 def get_ip():
     try:
@@ -44,7 +44,7 @@ def get_ip():
     except Exception as e:
         return {"error": str(e)}
 
-# 🔁 SPA fallback для Vue Router
+# 🔁 SPA fallback for Vue Router
 @app.middleware("http")
 async def spa_fallback(request: Request, call_next):
     response = await call_next(request)
