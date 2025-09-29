@@ -163,7 +163,50 @@ If you run into cold‑start latency on free tier: first request may take a few 
 | Institutions List | ![Institutions List](./frontend/src/assets/images/list-institution-delete.png) | Existing institutions with country labels and delete actions (cascade removes related loans). |
 | Upload CSV | ![Upload CSV](./frontend/src/assets/images/upload-csv.png) | CSV import panel where a user uploads loan data for a specific institution ID; backend parses with Pandas and updates loan portfolio. |
 
-## API Endpoints (summary)
+## Tests
+
+### Backend (pytest)
+- Stack: pytest, FastAPI TestClient, mongomock.
+- What’s covered:
+	- Institutions CRUD happy path (create → list → delete).
+	- CSV import + dashboard totals and automatic EXPIRED status when due date passes.
+- Where:
+	- `backend/tests/conftest.py` — overrides the Mongo client with in‑memory `mongomock`, configures app client, and ensures a `static/` dir exists for FastAPI.
+	- `backend/tests/test_institutions.py` — institution endpoints flow test.
+	- `backend/tests/test_loans_and_dashboard.py` — import CSV and verify dashboard aggregates.
+- Run:
+```bash
+cd backend
+source .venv/bin/activate   # if you created venv as in Setup
+pytest -q
+```
+Note: if you see a `urllib3 v2 only supports OpenSSL` warning on macOS/LibreSSL, it’s harmless. Optionally filter via `pytest.ini`.
+
+### Frontend (Vitest)
+- Stack: Vitest, @vue/test-utils, jsdom.
+- What’s covered:
+	- `tests/UploadCSV.spec.js` — validates Institution ID and file selection; on success mocks API call to `/loans/import/{id}` and expects success alert and form reset.
+	- `tests/InstitutionForm.spec.js` — submits the create form, renders returned ID, stores it in `localStorage`.
+- Notes:
+	- Все HTTP вызовы замоканы (модуль `@/services/api`).
+	- В тестовом режиме DevTools‑плагин отключён в `vite.config.js`, чтобы избежать падения Vitest.
+- Install & run:
+```bash
+# install deps once
+cd frontend
+npm install
+
+# run all tests once
+npm run test:run
+
+# watch mode / UI (optional)
+npm run test
+npm run test:ui
+
+# run a specific test file
+npm run test:run -- tests/UploadCSV.spec.js
+```
+Requirements: Node.js 20+ for the frontend, Python 3.9+ for the backend.
 
 ## How to Use
 1) Create an institution

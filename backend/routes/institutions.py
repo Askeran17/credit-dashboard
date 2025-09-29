@@ -7,7 +7,8 @@ router = APIRouter()
 
 @router.post("/institutions")
 def create_institution(institution: CreditInstitution):
-    result = db.institutions.insert_one(institution.dict())
+    # Pydantic v2: use model_dump instead of dict
+    result = db.institutions.insert_one(institution.model_dump())
     return {"id": str(result.inserted_id)}
 
 @router.get("/institutions")
