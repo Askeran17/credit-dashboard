@@ -18,7 +18,6 @@ describe('UploadCSV.vue', () => {
     window.localStorage.setItem('institution_id', 'abc123')
     const wrapper = mount(UploadCSV)
 
-    // Spy on alert
     const alertSpy = vi.spyOn(window, 'alert').mockImplementation(() => {})
 
     await wrapper.find('button.btn-success').trigger('click')
@@ -30,17 +29,14 @@ describe('UploadCSV.vue', () => {
     window.localStorage.setItem('institution_id', 'abc123')
     const wrapper = mount(UploadCSV)
 
-    // set institution id
     await wrapper.find('input.input').setValue('abc123')
 
-    // mock file input
     const file = new File(['a,b\n1,2'], 'test.csv', { type: 'text/csv' })
     const input = wrapper.find('input[type="file"]')
-    // set element value programmatically and trigger change
+
     Object.defineProperty(input.element, 'files', { value: [file] })
     await input.trigger('change')
 
-    // Stub alert to silence and assert
     const alertSpy = vi.spyOn(window, 'alert').mockImplementation(() => {})
 
     await wrapper.find('button.btn-success').trigger('click')

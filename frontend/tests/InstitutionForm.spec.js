@@ -17,19 +17,15 @@ describe('InstitutionForm.vue', () => {
   it('submits form and stores id to localStorage', async () => {
     const wrapper = mount(InstitutionForm)
 
-    // Fill required fields
     await wrapper.find('input[placeholder="Name"]').setValue('Bank A')
     await wrapper.find('input[placeholder="Country"]').setValue('SE')
 
     await wrapper.find('form').trigger('submit.prevent')
 
-    // api called with contacts split
     expect(api.post).toHaveBeenCalled()
 
-    // id rendered
     expect(wrapper.html()).toContain('new-id-1')
 
-    // localStorage
     expect(window.localStorage.getItem('institution_id')).toBe('new-id-1')
   })
 })
