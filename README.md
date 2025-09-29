@@ -188,8 +188,8 @@ Note: if you see a `urllib3 v2 only supports OpenSSL` warning on macOS/LibreSSL,
 	- `tests/UploadCSV.spec.js` — validates Institution ID and file selection; on success mocks API call to `/loans/import/{id}` and expects success alert and form reset.
 	- `tests/InstitutionForm.spec.js` — submits the create form, renders returned ID, stores it in `localStorage`.
 - Notes:
-	- Все HTTP вызовы замоканы (модуль `@/services/api`).
-	- В тестовом режиме DevTools‑плагин отключён в `vite.config.js`, чтобы избежать падения Vitest.
+	- All HTTP calls are mocked (`@/services/api` module).
+	- In test mode, the DevTools plugin is disabled in `vite.config.js` to prevent Vitest from crashing.
 - Install & run:
 ```bash
 # install deps once
