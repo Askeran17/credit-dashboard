@@ -10,8 +10,15 @@ mongo_uri = os.getenv("MONGO_URI")
 if not mongo_uri:
     raise ValueError("❌ MONGO_URI is not set. Check your environment variables.")
 
-# Connect to MongoDB Atlas
-client = MongoClient(mongo_uri, tls=True, tlsCAFile=certifi.where())
+# Connect to MongoDB Atlas with extended timeouts for Render cold starts
+client = MongoClient(
+    mongo_uri,
+    tls=True,
+    tlsCAFile=certifi.where(),
+    serverSelectionTimeoutMS=30000,
+    connectTimeoutMS=30000,
+    socketTimeoutMS=30000
+)
 db = client["credit_dashboard"]
 
 # 🧪 Test connection
